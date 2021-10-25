@@ -6,18 +6,21 @@ import com.badlogic.gdx.math.Vector2;
 
 import gb.ru.base.BaseScreen;
 import gb.ru.math.Rect;
+import gb.ru.sprite.Aero;
 import gb.ru.sprite.Background;
 import gb.ru.sprite.Star;
 
 public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
+    private static final float STEP = 0.05f;
 
     private TextureAtlas atlas;
     private Texture bg;
     private Background background;
 
     private Star[] stars;
+    private Aero aero;
 
     @Override
     public void show() {
@@ -29,6 +32,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
+        aero = new Aero(atlas);
     }
 
     @Override
@@ -45,6 +49,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.resize(worldBounds);
         }
+        aero.resize(worldBounds);
     }
 
     @Override
@@ -56,6 +61,18 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (keycode == 19) {
+            aero.setBottom(aero.getBottom() + STEP);
+        }
+        if (keycode == 20) {
+            aero.setBottom(aero.getBottom() - STEP);
+        }
+        if (keycode == 21) {
+            aero.setLeft(aero.getLeft() - STEP);
+        }
+        if (keycode == 22) {
+            aero.setRight(aero.getRight() + STEP);
+        }
         return super.keyDown(keycode);
     }
 
@@ -78,6 +95,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
+        aero.update(delta);
     }
 
     private void draw() {
@@ -86,6 +104,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        aero.draw(batch);
         batch.end();
     }
 }
